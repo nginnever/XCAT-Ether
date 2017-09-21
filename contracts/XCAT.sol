@@ -27,8 +27,7 @@ contract XCAT {
     lockedFunds = msg.value;
     lockTime = _lockTime;
     hashedSecret = _hash;
-
-    }
+  }
 
   function releasePreimage(bytes _preimage) {
     bytes32 test = sha256(sha256(_preimage));
