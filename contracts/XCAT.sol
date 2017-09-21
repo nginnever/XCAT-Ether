@@ -10,16 +10,7 @@ contract XCAT {
   uint256 public lockedFunds;
   uint256 public lockTime;
 
-  function buy(bytes32 _hash, uint256 _lockTime) payable {
-    require(now < _lockTime);
-    require(_hash != 0);
-
-    lockTime = _lockTime;
-    lockedFunds = msg.value;
-    locker = msg.sender;
-  }
-
-  function initiate(bytes32 _hash, uint256 _lockTime) payable {
+  function lock(bytes32 _hash, uint256 _lockTime) payable {
     require(now < _lockTime);
     require(_hash != 0);
 
