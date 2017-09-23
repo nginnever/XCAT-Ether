@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/nginnever/XCAT-Ether/issues"
   },
-  "homepage": "https://github.com/nginnever/XCAT-Ether#readme"
+  "homepage": "https://github.com/nginnever/XCAT-Ether#readme",
+  "dependencies": {
+    "bitcoinjs-lib": "^3.2.0",
+    "zcash": "^0.1.0"
+  }
 }
