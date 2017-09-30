@@ -13,7 +13,7 @@ const rpc = new Zcash({
 
 console.log(rpc)
 
-var btcPrivKey = "cNfkLSR4gPmkLfVmzykK8jeV8cGqu65ULkG7N9jB1eTGa8VfMA9g" // testnet private key, do not expose real keys
+var btcPrivKey = "cVBZo4Bup12vJgnLp2EBT7qnFRdP9qubRKW8d6QhVfLrMj7Tv19H" // testnet private key, do not expose real keys
 var zecPrivKey = "cS2RkckSNna9JbVy9iwjLmeanRT5nwqasHZP5htnQh6gjWC1WMhS" // testnet private key, do not expose real keys
 
 rpc.getbalance().then(info => {
@@ -64,10 +64,10 @@ console.log(keyPair.getPublicKeyBuffer())
 var tx = new bitcoin.TransactionBuilder(testnet)
 //var txId = "b25938df2da01941fc178fbdbb5748973bc21d2ef172331938eb6314f9ef9eb5"
 var txId = '8eadf8af826421eadc0857372047412b687ca6d28a80535dc463d1c15ed0cb31'
-tx.addInput(txId, 1)
+tx.addInput(txId, 0)
 //tx.addOutput("moJzzzukH8iR9jW4b3QsQ4Ezme8fucMj3M", 298996578)
-//tx.addOutput("myGfe4ykB4Hg9BfFwkQ35BS5k1uyDdG3k3", 294787578)
-
+//tx.addOutput("myGfe4ykB4Hg9BfFwkQ35BS5k1uyDdG3k3", 294787578),
+tx.addOutput("mrLouBWe1SvjPjJXT83YKhpyHB77N7b5MK", 297995578)
 var addrHash = bitcoin.address.fromBase58Check('moJzzzukH8iR9jW4b3QsQ4Ezme8fucMj3M').hash
 
 // var script = bitcoin.script.compile(
@@ -81,20 +81,23 @@ var addrHash = bitcoin.address.fromBase58Check('moJzzzukH8iR9jW4b3QsQ4Ezme8fucMj
 
 var commitment = "03d58daab37238604b3e57d4a8bdcffa401dc497a9c1aa4f08ffac81616c22b6"
 var commitBuf = new Buffer(commitment, 'hex')
-console.log("commit buffer")
-console.log(commitBuf)
 
+var preimage = "test123"
+var imagehash = bitcoin.crypto.sha256(new Buffer(preimage))
+console.log(imagehash.toString('hex'))
+console.log(commitment)
+var unlockedBlock = bitcoin.script.number.encode(1202635)
 var script = bitcoin.script.compile(
     [
         bitcoin.opcodes.OP_IF,
         bitcoin.opcodes.OP_SHA256,
-        commitBuf,
+        imagehash,
         bitcoin.opcodes.OP_EQUALVERIFY,
         bitcoin.opcodes.OP_DUP,
         bitcoin.opcodes.OP_HASH160,
         addrHash,
         bitcoin.opcodes.OP_ELSE,
-        //4200000,
+        unlockedBlock,
         bitcoin.opcodes.OP_CHECKLOCKTIMEVERIFY,
         bitcoin.opcodes.OP_DROP,
         bitcoin.opcodes.OP_DUP,
@@ -115,6 +118,17 @@ var buf = new Buffer(p2sh, 'hex')
 var p2shCompile = bitcoin.script.compile(buf)
 console.log(bitcoin.script.decompile(p2shCompile))
 console.log('---------')
-tx.addOutput(script, 1000)
+tx.addOutput(script, 1000000)
 tx.sign(0, keyPair)
 console.log(tx.build().toHex())
+
+
+// buy script
+var tx2 = new bitcoin.TransactionBuilder(testnet)
+var txId = '522ffc35763e2f4d73b501e31902900763c02ceb3f0856785f7f1123015c8de9'
+tx2.addInput(txId, 1)
+var script2 = bitcoin.script.compile(
+    [
+    	new Buffer(preimage),
+        bitcoin.opcodes.OP_TRUE
+    ])
