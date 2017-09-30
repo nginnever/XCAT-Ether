@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/nginnever/XCAT-Ether#readme",
   "dependencies": {
-    "bitcoinjs-lib": "^3.2.0",
+    "bitcoinjs-lib": "git+https://github.com/nginnever/bitcoinjs-lib.git#zcash",
+    "bs58": "^4.0.1",
+    "elliptic": "^6.4.0",
     "zcash": "^0.1.0"
   }
 }
